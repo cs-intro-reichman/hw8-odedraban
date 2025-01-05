@@ -57,20 +57,20 @@
             System.out.println("\nCan't follow a null user");
             return false;
         }
-        if (follows(name)) {
-            System.out.println("\n..." + name + " already exict in the follows list... ");
-            return false;
-        } 
-        if (fCount == maxfCount) {
+        if (fCount >= maxfCount) {
             System.out.println("\n...Can't add " + name + " to the follows list... ");
             return false;
         }
-        else {
-            System.out.println("\n...Adding " + name + " to the follows list...");
-            this.follows[fCount] = name;
-            fCount++;
-            return true;
+        for (int i = 0; i < fCount; i++) {
+            if (follows[i] != null && follows[i].equalsIgnoreCase(name)) {
+                System.out.println("\n..." + name + " already exict in the follows list... ");
+                return false;
+            }
         }
+        System.out.println("\n...Adding " + name + " to the follows list...");
+        follows[fCount] = name;
+        fCount++;
+        return true;
     }
 
     /** Removes the given name from the follows list of this user. If successful, returns true.
