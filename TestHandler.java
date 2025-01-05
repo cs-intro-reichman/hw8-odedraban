@@ -313,6 +313,7 @@ public class TestHandler {
         return this.tester.test("Alice, getting started = false, try to add Followee Foo and foo", expected, actual);
     }
 
+
     // Improved removeFollowee Tests
     public void mainRemoveFolloweeTest() {
         this.tester.reset(TesterQuestionEnum.USER_REMOVE_FOLLOWEE);
