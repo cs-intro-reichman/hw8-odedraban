@@ -32,7 +32,7 @@ public class Network {
     public User getUser(String name) {
         if (name == null) return null;
         for (int i = 0; i < userCount; i++) {
-            if (users[i].getName().equalsIgnoreCase(name)) return users[i];
+            if (users[i].getName().toLowerCase().equalsIgnoreCase(name.toLowerCase())) return users[i];
         }
         return null;
     }
@@ -69,37 +69,30 @@ public class Network {
             System.out.println("\n...Can't do this action with a null user...");
             return false;
         }
-        if (name1 == name2) {
+        if (name1.toLowerCase().equals(name2.toLowerCase())) {
             System.out.println("\n...Can't do this action for the same user...");
             return false;
         }
-        else if (getUser(name1) == null || getUser(name2) == null) {
+        if (getUser(name1) == null || getUser(name2) == null) {
             System.out.println("\n...Can't do this action with user that doesn't exict in the list...");
             return false;
         }
-        else {
-            getUser(name1).addFollowee(name2);
-            if (getUser(name1).addFollowee(name2)) {
-                System.out.println("\n..." + name1 + " follows " + name2 + "...");
-                return true;
-            } 
-            if (getUser(name1).addFollowee(name2) == false) {
-                System.out.println("\n..." + name1 + " can't follow " + name2 + "...");
-                return false;
-            } 
-        }
-        return false;
+        User user1 = getUser(name1);
+        User user2 = getUser(name2);
+        return user1.addFollowee(name2);
     }
     
     /** For the user with the given name, recommends another user to follow. The recommended user is
      *  the user that has the maximal mutual number of followees as the user with the given name. */
     public String recommendWhoToFollow(String name) {
+        User user = getUser(name);
         if (name == null) return null;
+        if (user == null) return null;
         User mostRecommendedUserToFollow = null;
         int maxMatualNum = 0;
         for (int i = 0; i < userCount; i++) {
             if (users[i] != null) {
-                if (users[i].getName().equals(name)) continue;
+                if (user.getName().equals(users[i].getName())) continue;
                 if (users[i].countMutual(getUser(name)) > maxMatualNum) {
                     mostRecommendedUserToFollow = users[i];
                     maxMatualNum = users[i].countMutual(getUser(name));
@@ -112,10 +105,13 @@ public class Network {
     /** Computes and returns the name of the most popular user in this network: 
      *  The user who appears the most in the follow lists of all the users. */
     public String mostPopularUser() {
-        User mostPopular = users[0];
-        for (int i = 1; i < userCount; i++) {
-            if (followeeCount(users[i].getName()) > followeeCount(mostPopular.getName())) {
+        if (userCount == 0) return null;
+        User mostPopular = null;
+        int maxFolowees = 0;
+        for (int i = 0; i < userCount; i++) {
+            if (mostPopular == null || followeeCount(users[i].getName()) > maxFolowees) {
                 mostPopular = users[i];
+                maxFolowees = followeeCount(users[i].getName());
             }
         }
         return mostPopular.getName();
@@ -126,24 +122,18 @@ public class Network {
     private int followeeCount (String name) {
         int counter = 0;
         for (int i = 0; i < userCount; i++) {
-            if (users[i].follows(name)) counter++;
+            if (users[i].follows(name) && !users[i].getName().equals(name)) counter++;
         }
         return counter;
     }
 
     // Returns a textual description of all the users in this network, and who they follow.
     public String toString() {
-       System.out.println("\nNetwork:");
+       String str = "Network:";
        for (int i = 0; i < userCount; i++) {
-        if (users[i] != null) {
-            System.out.print("\n" + users[i].getName() + " ->");
-            String[] arr = users[i].getfFollows();
-            for (int j = 0; j < users[i].getfCount(); j++) {
-                System.out.print(" " + arr[j]);
-            }
+            str += "\n" + users[i].toString();
         }
-       }
-       return null;
+       return str;
     }
 
  }

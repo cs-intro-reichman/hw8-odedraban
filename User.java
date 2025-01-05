@@ -45,7 +45,7 @@
     public boolean follows(String name) {
         if (name == null) return false; 
         for (int i = 0; i < fCount; i++) {
-            if (this.follows[i].equalsIgnoreCase(name)) return true;
+            if (name.toLowerCase().equals(follows[i].toLowerCase())) return true;
         }
         return false;
     }
@@ -57,19 +57,17 @@
             System.out.println("\nCan't follow a null user");
             return false;
         }
-        if (fCount >= maxfCount) {
+        if (fCount == maxfCount) {
             System.out.println("\n...Can't add " + name + " to the follows list... ");
             return false;
         }
-        for (int i = 0; i < fCount; i++) {
-            if (follows[i] != null && follows[i].equalsIgnoreCase(name)) {
-                System.out.println("\n..." + name + " already exict in the follows list... ");
-                return false;
-            }
+        if (follows(name)) {
+            System.out.println("\n...Can't add " + name + "  - already in the the follows list... ");
+            return false;
         }
         System.out.println("\n...Adding " + name + " to the follows list...");
-        follows[fCount] = name;
         fCount++;
+        follows[fCount] = name;
         return true;
     }
 
@@ -77,8 +75,9 @@
      *  If the name is not in the list, does nothing and returns false. */
     public boolean removeFollowee(String name) {
         if (name == null) return false;
+        if (fCount == 0) return false;
         for (int i = 0; i < fCount; i++) {
-            if (follows[i].equals(name)) {
+            if (name.toLowerCase().equals(follows[i].toLowerCase())) {
                 for (int j = i; j < fCount - 1; j++) {
                     this.follows[j] = this.follows[j + 1];
                 }
