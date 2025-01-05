@@ -32,7 +32,7 @@ public class Network {
     public User getUser(String name) {
         if (name == null) return null;
         for (int i = 0; i < userCount; i++) {
-            if (users[i].getName().equals(name)) return users[i];
+            if (users[i].getName().equalsIgnoreCase(name)) return users[i];
         }
         return null;
     }
