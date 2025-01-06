@@ -42,32 +42,31 @@
     }
 
     /** If this user follows the given name, returns true; otherwise returns false. */
-    public boolean follows(String name) {
-        if (name == null) return false;
+    public boolean follows (String name) {
         for (int i = 0; i < fCount; i++) {
-            if (follows[i] != null && name.toLowerCase().equals(follows[i].toLowerCase())) return true;
+            if (name.toLowerCase().equals(follows[i].toLowerCase())) return true;
         }
         return false;
     }
     
     /** Makes this user follow the given name. If successful, returns true. 
      *  If this user already follows the given name, or if the follows list is full, does nothing and returns false; */
-    public boolean addFollowee(String name) {
+    public boolean addFollowee (String name) {
         if (name == null) {
-            // System.out.println("\nCan't follow a null user");
+            System.out.println("\nCan't follow a null user");
             return false;
         }
         if (fCount == maxfCount) {
-            // System.out.println("\n...Can't add " + name + " to the follows list... ");
+            System.out.println("\n...Can't add " + name + " to the follows list... ");
             return false;
         }
         if (follows(name)) {
-            // System.out.println("\n...Can't add " + name + "  - already in the the follows list... ");
+            System.out.println("\n...Can't add " + name + "  - already in the the follows list... ");
             return false;
         }
-        // System.out.println("\n...Adding " + name + " to the follows list...");
-        fCount++;
+        System.out.println("\n...Adding " + name + " to the follows list...");
         follows[fCount] = name;
+        fCount++;
         return true;
     }
 
@@ -77,16 +76,17 @@
         if (fCount == 0 || name == null) return false;
         for (int i = 0; i < fCount; i++) {
             if (name.toLowerCase().equals(follows[i].toLowerCase())) {
+                follows[i] = null;
                 for (int j = i; j < fCount - 1; j++) {
-                    this.follows[j] = this.follows[j + 1];
+                    follows[j] = follows[j + 1];
                 }
-                this.follows[fCount - 1] = null;
+                follows[fCount - 1] = null;
                 fCount--;
-                // System.out.println("\n...Removing " + name + " ...");
+                System.out.println("\n...Removing " + name + " ...");
                 return true;
             }
         }
-        // System.out.println("\n...Can't remove " + name + " because " + this.getName() + " doesn't follow him...");
+        System.out.println("\n...Can't remove " + name + " because " + this.getName() + " doesn't follow him...");
         return false;
     }
 
@@ -103,7 +103,7 @@
     /** Checks is this user is a friend of the other user.
      *  (if two users follow each other, they are said to be "friends.") */
     public boolean isFriendOf(User other) {
-        if ((this.follows(other.getName())) && (other.follows(this.getName()))) return true;
+        if ((this.follows(other.getName())) && (other.follows(name))) return true;
         return false;
     }
 
